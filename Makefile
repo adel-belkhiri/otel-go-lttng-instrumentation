@@ -1,18 +1,22 @@
 CC=gcc
+AR=ar
 CFLAGS= -fPIC -I.
-LDFLAGS=-llttng-ust
-LIB=libsdk_span_tracepoints.so
+LIB=libsdk_span_tracepoints.a
 OBJS=tpp.o
 
 all: $(LIB)
 	go build
 
 $(LIB): $(OBJS)
-	$(CC) -shared -o $@ $^ $(LDFLAGS)
+	$(AR) rcs $@ $^
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
 	rm -f $(OBJS) $(LIB)
+
+install:
+	cp $(LIB) /usr/local/lib
+	ldconfig
 
