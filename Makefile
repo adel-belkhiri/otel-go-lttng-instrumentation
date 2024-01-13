@@ -16,7 +16,7 @@ $(LIB): $(OBJS)
 clean:
 	rm -f $(OBJS) $(LIB)
 
-install:
-	cp $(LIB) /usr/local/lib
-	ldconfig
+#install:
+#	cp $(LIB) /usr/local/lib
+#	ldconfig
 
