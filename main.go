@@ -1,7 +1,7 @@
 package lttng
 
 /*
-#cgo LDFLAGS: -ldl -llttng-ust -L. -lsdk_span_tracepoints
+#cgo LDFLAGS: -ldl -llttng-ust
 
 #define TRACEPOINT_DEFINE
 #include "./tpp.h"
