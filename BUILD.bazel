@@ -1,0 +1,17 @@
+load("@io_bazel_rules_go//go:def.bzl", "go_library")
+
+go_library(
+    name = "go_default_library",
+    srcs = [
+        "main.go",  # Your Go source file
+        "tpp.c",    # Your C source file for cgo
+    ],
+    hdrs = ["tpp.h"],  # Header files
+    cgo = True,  # Enable CGo
+    clinkopts = ["-ldl", "-llttng-ust"],  # Linker flags for CGo
+    importpath = "github.com/adel-belkhiri/otel-go-lttng-instrumentation",  # Replace with your package's import path
+    visibility = ["//visibility:public"],
+    deps = [
+        # Include any dependencies here
+    ],
+)
