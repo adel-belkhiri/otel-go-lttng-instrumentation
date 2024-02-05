@@ -1,3 +1,3 @@
 module github.com/adel-belkhiri/otel-go-lttng-instrumentation
 
-go 1.21.4
+go 1.19.0
