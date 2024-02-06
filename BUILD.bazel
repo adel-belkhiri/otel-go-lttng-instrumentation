@@ -1,17 +1,23 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 
+# Rule for compiling C code and creating the static library
+cc_library(
+    name = "sdk_span_tracepoints",
+    srcs = ["tpp.c"],
+    hdrs = ["tpp.h"],
+    copts = ["-fPIC"],
+    linkstatic = True,
+    visibility = ["//visibility:public"],
+)
+
+# Rule for building the Go library with cgo integration
 go_library(
     name = "go_default_library",
-    srcs = [
-        "main.go",  # Your Go source file
-        "tpp.c",    # Your C source file for cgo
-    ],
-    hdrs = ["tpp.h"],  # Header files
-    cgo = True,  # Enable CGo
-    clinkopts = ["-ldl", "-llttng-ust"],  # Linker flags for CGo
-    importpath = "github.com/adel-belkhiri/otel-go-lttng-instrumentation",  # Replace with your package's import path
+    srcs = ["main.go"],
+    cdeps = [":sdk_span_tracepoints"],
+    cgo = True,
+    clinkopts = ["-ldl", "-llttng-ust"],
+    importpath = "github.com/adel-belkhiri/otel-go-lttng-instrumentation",
     visibility = ["//visibility:public"],
-    deps = [
-        # Include any dependencies here
-    ],
 )
+
