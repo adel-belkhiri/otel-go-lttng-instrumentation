@@ -1,6 +1,7 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
+load("@rules_cc//cc:defs.bzl", "cc_library")
 
-# Rule for compiling C code and creating the static library
+# Rule for building the C static library that contains the LTTng tracepoints
 cc_library(
     name = "sdk_span_tracepoints",
     srcs = ["tpp.c"],
@@ -10,14 +11,12 @@ cc_library(
     visibility = ["//visibility:public"],
 )
 
-# Rule for building the Go library with cgo integration
 go_library(
-    name = "go_default_library",
-    srcs = ["main.go"],
+    name = "otel-go-lttng-instrumentation",
+    srcs = ["go-tracepoints.go"],
     cdeps = [":sdk_span_tracepoints"],
     cgo = True,
     clinkopts = ["-ldl", "-llttng-ust"],
     importpath = "github.com/adel-belkhiri/otel-go-lttng-instrumentation",
     visibility = ["//visibility:public"],
 )
-
