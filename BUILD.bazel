@@ -28,6 +28,8 @@ pkg_tar(
     srcs = [
         ":sdk_span_tracepoints",
         ":otel-go-lttng-instrumentation",
+        "BUILD.bzl",
+        "tpp.h",
     ],
     extension = "tar.gz",
     mode = "0644",
