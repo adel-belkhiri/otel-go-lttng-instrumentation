@@ -8,7 +8,7 @@ cc_library(
     name = "sdk_span_tracepoints",
     srcs = ["tpp.c"],
     hdrs = ["tpp.h"],
-    copts = ["-fPIC"],
+    copts = ["-fPIC", "-isystem/usr/include/"],
     linkstatic = True,
     visibility = ["//visibility:public"],
 )
@@ -23,14 +23,14 @@ go_library(
     visibility = ["//visibility:public"],
 )
 
-pkg_tar(
-    name = "otel_go_lttng_instrumentation_archive",
-    srcs = [
-        ":sdk_span_tracepoints",
-        ":otel-go-lttng-instrumentation",
-        "BUILD.bzl",
-        "tpp.h",
-    ],
-    extension = "tar.gz",
-    mode = "0644",
-)
+# pkg_tar(
+#     name = "otel_go_lttng_instrumentation_archive",
+#     srcs = [
+#         ":sdk_span_tracepoints",
+#         ":otel-go-lttng-instrumentation",
+#         "BUILD.bzl",
+#         "tpp.h",
+#     ],
+#     extension = "tar.gz",
+#     mode = "0644",
+# )
