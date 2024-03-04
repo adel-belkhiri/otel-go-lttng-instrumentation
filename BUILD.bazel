@@ -1,6 +1,5 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
 load("@rules_cc//cc:defs.bzl", "cc_library")
-load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
 
 
 # Rule for building the C static library that contains the LTTng tracepoints
@@ -23,14 +22,3 @@ go_library(
     visibility = ["//visibility:public"],
 )
 
-# pkg_tar(
-#     name = "otel_go_lttng_instrumentation_archive",
-#     srcs = [
-#         ":sdk_span_tracepoints",
-#         ":otel-go-lttng-instrumentation",
-#         "BUILD.bzl",
-#         "tpp.h",
-#     ],
-#     extension = "tar.gz",
-#     mode = "0644",
-# )
