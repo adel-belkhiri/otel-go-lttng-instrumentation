@@ -1,36 +1,38 @@
 load("@io_bazel_rules_go//go:def.bzl", "go_library")
-load("@rules_cc//cc:defs.bzl", "cc_library")
-load("@rules_pkg//pkg:tar.bzl", "pkg_tar")
+load("@rules_foreign_cc//foreign_cc:defs.bzl", "make")
 
-
-# Rule for building the C static library that contains the LTTng tracepoints
-cc_library(
-    name = "sdk_span_tracepoints",
-    srcs = ["tpp.c"],
-    hdrs = ["tpp.h"],
-    copts = ["-fPIC", "-isystem/usr/include/"],
-    linkstatic = True,
-    visibility = ["//visibility:public"],
+filegroup(
+    name = "local_sources",
+    srcs = ["Makefile", "tpp.c", "tpp.h"],
+    visibility = ["//visibility:private"],
 )
+
+# Assuming your C library source files are in the same directory as this BUILD file
+# and you have a Makefile in the same directory.
+make(
+    name = "span_tracepoint_library",
+    lib_source = ":local_sources",
+    #out_lib_dir = "..",
+    includes = ["tpp.h"],
+    out_static_libs = ["libsdk_span_tracepoints.a"],
+    visibility = ["//visibility:public"],
+    targets =["PREFIX=$$INSTALLDIR$$ install",],
+)
+
+#make_configure(
+#    name = "sdk_span_tracepoints",
+#    lib_source = ":local_sources",
+#    out_static_libs = ["libsdk_span_tracepoints.a"],
+#    visibility = ["//visibility:public"],
+#    targets =["all", "install",],
+#)
 
 go_library(
     name = "otel-go-lttng-instrumentation",
-    srcs = ["go-tracepoints.go"],
-    cdeps = [":sdk_span_tracepoints"],
+    srcs = ["go-tracepoints.go", "tpp.h"],
+    cdeps = [":span_tracepoint_library"],
     cgo = True,
     clinkopts = ["-ldl", "-llttng-ust"],
     importpath = "github.com/adel-belkhiri/otel-go-lttng-instrumentation",
     visibility = ["//visibility:public"],
 )
-
-# pkg_tar(
-#     name = "otel_go_lttng_instrumentation_archive",
-#     srcs = [
-#         ":sdk_span_tracepoints",
-#         ":otel-go-lttng-instrumentation",
-#         "BUILD.bzl",
-#         "tpp.h",
-#     ],
-#     extension = "tar.gz",
-#     mode = "0644",
-# )

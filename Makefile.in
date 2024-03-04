@@ -3,16 +3,13 @@ AR=ar
 CFLAGS= -fPIC -I.
 LIB=libsdk_span_tracepoints.a
 OBJS=tpp.o
-OUTPUT_DIR=otel-go-lttng-instrumentation
+OUTPUT_DIR=sdk_span_tracepoints/lib/
 
 all: $(LIB)
-	go build
+#	go build
 
 $(LIB): $(OBJS)
-	# mkdir -p $(OUTPUT_DIR)
 	$(AR) rcs $@ $^
-	pwd
-	# cp $(LIB) $(OUTPUT_DIR)
 
 %.o: %.c
 	$(CC) $(CFLAGS) -c $< -o $@
@@ -20,6 +17,8 @@ $(LIB): $(OBJS)
 clean:
 	rm -f $(OBJS) $(LIB)
 
-install: $(LIB)
-	cp -rpv $(LIB) $(PREFIX)/lib
-	#cp -rpv *.h $(PREFIX)/include
+install:
+	mkdir -p $(OUTPUT_DIR)
+	cp $(LIB) $(OUTPUT_DIR)
+#	ldconfig
+
